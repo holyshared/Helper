@@ -1,0 +1,101 @@
+<script type="text/javascript" src="/depender/build?require=Element.Event,Helper/Helper"></script>
+<script type="text/javascript">
+(function(doc){
+
+	var Mock = new Class({
+
+		Implement: [Helper]
+
+	});
+
+	var HelperMock1 = new Class({
+
+		Implement: [Helper.Interface]
+
+	});
+
+	var HelperMock2 = new Class({
+
+		Implement: [Helper.Interface]
+
+	});
+	
+
+
+
+
+	window.addEventListener('load', function(){
+
+		var testcases = [];
+		testcases.push({
+			title: 'addHelper/addHelpers',
+			description : 'addHelper and addHelpers method testcase',
+			fn: function(){
+
+				var target1 = new Mock();
+				target1.addHelper(new HelperMock1());
+
+				log ( (target1.hasHelper('helperMock1')) ? '' : ''  );
+
+				var target2 = new Mock();
+				target2.addHelpers(new HelperMock1(), new HelperMock2());
+
+				log ( (target2.hasHelper('helperMock1')) ? '' : ''  );
+				log ( (target2.hasHelper('helperMock2')) ? '' : ''  );
+
+			}
+		});
+
+		testcases.push({
+			title: 'removeHelper/removeHelpers',
+			description : 'addHelper and removeHelpers method testcase',
+			fn: function(){
+
+				var helper1 = new HelperMock1();
+				var target1 = new Mock();
+				target1.addHelper(helper1);
+				target1.removeHelper(helper1);
+
+				log ( (!target1.hasHelper('helperMock1')) ? '' : ''  );
+
+				var helper1 = new HelperMock1();
+				var helper2 = new HelperMock2();
+				var target2 = new Mock();
+				target2.removeHelpers(helper1, helper2);
+
+				log ( (!target2.hasHelper('helperMock1')) ? '' : ''  );
+				log ( (!target2.hasHelper('helperMock2')) ? '' : ''  );
+
+			}
+		});
+
+		testcases.push({
+			title: 'enableHelper/disableHelper',
+			description : 'enableHelper and disableHelper method testcase',
+			fn: function(){
+
+				var helper1 = new HelperMock1();
+				var target1 = new Mock();
+				target1.addHelper(helper1);
+
+				target1.disableHelper('helperMock1');
+
+				log ( (!target2.isEnableHelper('helperMock1')) ? '' : ''  );
+
+				target1.enableHelper('helperMock1');
+
+				log ( (!target2.isDisableHelper('helperMock1')) ? '' : ''  );
+
+			}
+		});
+
+		makeActions(testcases);
+
+		testcases.each(function(testcase, key){
+			$('test-' + key.toString()).fireEvent('click');
+		});
+
+	}, false);
+
+}(document));
+</script>

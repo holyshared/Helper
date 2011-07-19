@@ -1,4 +1,4 @@
-Plugin Name
+Helper
 ====================================
 
 ![Screenshot1](url_to_image1)

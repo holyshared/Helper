@@ -1,26 +1,27 @@
-name: Plugin Name
+name: Helper
 
-web: "[http://url_to_plugin](label)"
+web: "[http://holyshared.github.com/Helper](http://holyshared.github.com/Helper)"
 
 description:
 
-authors: "${TM_FULLNAME}"
+authors: "[Noritaka Horio](http://sharedhat.com)"
 
-license: "MIT License"
+license: "[MIT License](http://sharedhat.com/mit-license.txt)"
 
-copyright: "&copy; ${TM_FULLNAME}"
+copyright: "&copy; [Noritaka Horio](http://sharedhat.com)"
 
 sources:
-  - "Source/Plugin.js"
+  - "Source/Core.js"
+  - "Source/Keyboard.js"
 
-author: ${TM_FULLNAME}
+author: holyshared
 
 category: Interface
 
-tags: [tag1, tag2]
+tags: [helper, mobile]
 
-current: version
+current: 1.0
 
-docs: http://url_to_plugin_docs
+#docs: http://url_to_plugin_docs
 
-demo: http://url_to_plugin_demo
+#demo: http://url_to_plugin_demo
