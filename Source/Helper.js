@@ -17,7 +17,7 @@ requires:
 
 provides:
   - Helper
-  - Helper.Interface
+  - Helper.HelperObject
 ...
 */
 
@@ -39,6 +39,7 @@ var Helper = this.Helper = new Class({
 		bindHelper.bind(this);
 		var key = bindHelper.getName();
 		this._helpers[key] = bindHelper;
+		return this;
 	},
 
 	addHelpers: function(){
@@ -46,12 +47,14 @@ var Helper = this.Helper = new Class({
 		helpers.each(function(helper){
 			this.addHelper(helper);
 		}, this);
+		return this;
 	},
 
 	removeHelper: function(helper){
 		var unbindHelper = validateHelper(helper);
 		var key = unbindHelper.getName();
 		delete this._helpers[key];
+		return this;
 	},
 
 	removeHelpers: function(){
@@ -62,6 +65,7 @@ var Helper = this.Helper = new Class({
 		helpers.each(function(helper){
 			this.removeHelper(helper);
 		}, this);
+		return this;
 	},
 
 	getHelper: function(name){
@@ -74,23 +78,25 @@ var Helper = this.Helper = new Class({
 	getHelpers: function(){
 		var helpers = [];
 		var names = Array.from(arguments);
-		if (helpers.length <= 0) {
+		if (names.length <= 0) {
 			names = Object.keys(this._helpers);
 		}
 		names.each(function(key){
 			helpers.push(this.getHelper(key));
-		});
+		}, this);
 		return helpers;
 	},
 
 	enableHelper: function(name){
 		var helper = this.getHelper(name);
 		helper.setEnable(true);
+		return this;
 	},
 
 	disableHelper: function(name){
 		var helper = this.getHelper(name);
 		helper.setEnable(false);
+		return this;
 	},
 
 	hasHelper: function(name){
@@ -110,72 +116,139 @@ var Helper = this.Helper = new Class({
 });
 
 
-Helper.Interface = new Class({
-
-	_methods: {},
+Helper.HelperObject = new Class({
 
 	Implements: [Options, Events],
 
+	_name: null,
+	_target: null,
+	_methods: {},
+	_enable: false,
+
+	initialize: function(options) {
+		this.setOptions(this._prepare(options));
+	},
+
+	_prepare: function(options){
+		if (!options) return {};
+		var props = ['name', 'target', 'methods'];
+		props.each(function(key){
+			if (options[key]) {
+				this['_' + key] = options[key];
+				delete options[key];
+			}
+		}, this);
+		return options;
+	},
+
 	getName: function(){
-		return this.name;
+		return this._name;
 	},
 
 	getTarget: function(){
-		return this.target;
+		return this._target;
 	},
 
 	setEnable: function(value){
+		if (this.isEnable() == value) {
+			return;
+		}
 		var eventType = (value) ? 'enable' : 'disable';
 		this[eventType]();
 		this.fireEvent(eventType);
 		this._enable = value;
+		return this;
 	},
 
 	bind: function(control){
 		if (!Type.isObject(control)) {
-			throw new TypeError('');
+			throw new TypeError('It is an invalid object.');
 		}
-		this.target = control;
+		this.setup();
+		if (!this.isEnable()) {
+			this.setEnable(true);
+		}
+		this._target = control;
+		return this;
 	},
 
 	unbind: function(){
-		this.target = null;
+		this.setEnable(false);
+		this._target = null;
 	},
 
 	isEnable: function(){
 		return (this._enable) ? true : false;
 	},
 
-	getInvokeMethod: function(key){
-		if (!this.hasInvokeMethod(key)) {
+	getMethod: function(key){
+		if (!this.hasMethod(key)) {
+			throw new Error('The specification ' + key + ' method is not found.');
 		}
 		return this._methods[key];
 	},
 
-	getInvokeMethods: function(){
-	},
-
-	addInvokeMethod: function(key, method){
-		this._methods[key] = method;
-	},
-
-	addInvokeMethods: function(methods){
-		for (var key in methods) {
-			this.addInvokeMethod(key, methods[key]);
+	getMethods: function(){
+		var methods = [];
+		var names = Array.from(arguments);
+		if (names.length <= 0) {
+			names = Object.keys(this._methods);
 		}
+		names.each(function(key){
+			methods.push(this.getMethod(key));
+		}, this);
+		return methods;
 	},
 
-	hasInvokeMethod: function(key){
+	addMethod: function(key, method){
+		if (this.hasMethod(method)) {
+			return;
+		}
+		this._methods[key] = method;
+		return this;
+	},
+
+	addMethods: function(methods){
+		for (var key in methods) {
+			this.addMethod(key, methods[key]);
+		}
+		return this;
+	},
+
+	removeMethod: function(key){
+		if (!this.hasMethod(key)) {
+			throw new TypeError('Because method ' + key + ' doesn\'t exist, it is not possible to delete it.');
+		}
+		delete this._methods[key];
+		return this;
+	},
+
+	removeMethods: function(){
+		var methods = Array.from(arguments);
+		if (methods.length <= 0) {
+			methods = this.getMethods();
+		}
+		methods.each(function(method){
+			this.removeMethod(method);
+		}, this);
+		return this;
+	},
+
+	hasMethod: function(key){
 		return (this._methods[key]) ? true : false;
 	},
 
-	delagate: function(key, args){
-		var handler = this.getInvokeMethod(key);
-		handler(args);
+	delegate: function(key, args){
+		var method = this.getMethod(key);
+		var target = this.getTarget();
+		if (!Type.isFunction(target[method])) {
+			throw new Error('Method ' + method + ' doesn\'t exist or it is an invalid method.');
+		}
+		target[method].apply(target, args);
 	}
 
 });
 
-new Type('Helper', Helper.Interface);
+new Type('Helper', Helper.HelperObject);
 
 }());

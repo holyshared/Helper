@@ -24,57 +24,13 @@ Helper
 
 
 
-Helper.Interface
+Helper.AbstractHelper
 -------------------------------------------------
 
+### Events
 
-### Methods
-
-* getName
-* getTarget
-* setEnable
-* bind
-* unbind
-* isEnable
-* getInvokeMethod
-* getInvokeMethods
-* addInvokeMethod
-* addInvokeMethods
-* removeInvokeMethod
-* removeInvokeMethods
-* hasInvokeMethod
-
-
-Helper.Keyboard
--------------------------------------------------
-
-	var Controller = new Class({
-	
-		Implements: [Helper]
-	
-		prev: function(){
-			//do something
-		},
-	
-		next: function(){
-			//do something
-		}
-	
-	});
-	
-	var controller = new Controller();
-	
-	var helper = new Helper.Keyboard();
-	helper.addInvokeMethods({
-		p: controller.prev,
-		n: controller.next
-	});
-	controller.addHelper(helper);
-
-### Extends
-
-Helper.Interface
-
+* onEnable
+* onDisable
 
 ### Methods
 
@@ -86,11 +42,66 @@ Helper.Interface
 * enable
 * disable
 * isEnable
-* getInvokeMethod
-* getInvokeMethods
-* addInvokeMethod
-* addInvokeMethods
-* removeInvokeMethod
-* removeInvokeMethods
-* hasInvokeMethod
-* delagate
+* getMethod
+* getMethods
+* addMethod
+* addMethods
+* removeMethod
+* removeMethods
+* hasMethod
+* delegate
+
+
+Helper.Keyboard
+-------------------------------------------------
+
+	var Controller = new Class({
+	
+		Implements: [Helper] //Helper building in of the controller object
+
+		prev: function(){
+			//do something
+		},
+
+		next: function(){
+			//do something
+		}
+	
+	});
+
+	var controller = new Controller();
+
+	var helper = new Helper.Keyboard();
+	helper.addMethods({
+		p: 'prev', //When p is typed, the prev method is executed.
+		n: 'next' //When n is typed, the next method is executed.
+	});
+	controller.addHelper(helper);
+
+### Extends
+
+Helper.AbstractHelper
+
+### Events
+
+* onEnable
+* onDisable
+
+### Methods
+
+* getName
+* getTarget
+* setEnable
+* bind
+* unbind
+* enable
+* disable
+* isEnable
+* getMethod
+* getMethods
+* addMethod
+* addMethods
+* removeMethod
+* removeMethods
+* hasMethod
+* delegate

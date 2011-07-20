@@ -2,7 +2,7 @@
 ---
 name: Helper.Keyboard
 
-description: 
+description: The input with the keyboard is notified to the related specific object.
 
 license: MIT-style
 
@@ -10,34 +10,40 @@ authors:
 - Noritaka Horio
 
 requires:
-  - Helper/Helper
+  - Helper/Helper.HelperObject
 
 provides:
   - Helper.Keyboard
 ...
 */
 
-(function(Helper){
+(function(doc, Helper){
 
 Helper.Keyboard = new Class({
 
-	Implement: [Helper.Interface],
+	Extends: Helper.HelperObject,
+
+	_name: 'keyboard',
+	_handler: null,
 
 	_onKeydown: function(event){
-		if (!this.isEnable()) {
-			return;
-		}
-		this.delagate(event.key);
+		if (!this.isEnable()) return;
+		if (!this.hasMethod(event.key)) return;
+		this.delegate(event.key);
+	},
+
+	setup: function(){
+		this._handler = this._onKeydown.bind(this);
 	},
 
 	enable: function() {
-		window.addEvent('keydown', this._onKeydown.bind(this));
+		doc.addEvent('keydown', this._handler);
 	},
 
 	disable: function() {
-		window.removeEvent('keydown', this._onKeydown);
+		doc.removeEvent('keydown', this._handler);
 	}
 
 });
 
-}(Helper));
+}(document, Helper));
