@@ -2,7 +2,7 @@
 ---
 name: Helper
 
-description: 
+description: The miscellaneous function is offered to the object built in.
 
 license: MIT-style
 
@@ -10,7 +10,10 @@ authors:
 - Noritaka Horio
 
 requires:
+  - Core/Type
   - Core/Class
+  - Core/Options
+  - Core/Event
 
 provides:
   - Helper
@@ -20,17 +23,22 @@ provides:
 
 (function(){
 
+function validateHelper(helper) {
+	if (!Type.isHelper(helper)){
+		throw new TypeError('It is an invalid helper.');
+	}
+	return helper;
+}
+
 var Helper = this.Helper = new Class({
 
 	_helpers: {},
 
 	addHelper: function(helper){
-		if (!Type.isHelper(helper)){
-			throw new TypeError('');
-		}
-		helper.bind(this);
-		var key = helper.getName();
-		this._helpers[key] = helper;
+		var bindHelper = validateHelper(helper);
+		bindHelper.bind(this);
+		var key = bindHelper.getName();
+		this._helpers[key] = bindHelper;
 	},
 
 	addHelpers: function(){
@@ -41,10 +49,8 @@ var Helper = this.Helper = new Class({
 	},
 
 	removeHelper: function(helper){
-		if (!Type.isHelper(helper)){
-			throw new TypeError('');
-		}
-		var key = helper.getName();
+		var unbindHelper = validateHelper(helper);
+		var key = unbindHelper.getName();
 		delete this._helpers[key];
 	},
 
@@ -60,7 +66,7 @@ var Helper = this.Helper = new Class({
 
 	getHelper: function(name){
 		if (!this.hasHelper(name)){
-			throw new Error('');
+			throw new Error('Helper ' + name + ' is not found.');
 		}
 		return this._helpers[name];
 	},

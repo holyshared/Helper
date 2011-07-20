@@ -11,8 +11,8 @@ license: "[MIT License](http://sharedhat.com/mit-license.txt)"
 copyright: "&copy; [Noritaka Horio](http://sharedhat.com)"
 
 sources:
-  - "Source/Core.js"
-  - "Source/Keyboard.js"
+  - "Source/Helper.js"
+  - "Source/Helper.Keyboard.js"
 
 author: holyshared
 
