@@ -2,7 +2,7 @@
 ---
 name: Helper.Orientation
 
-description: 
+description: The object that specifies the change of orientation is notified.
 
 license: MIT-style
 
