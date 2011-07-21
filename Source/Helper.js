@@ -160,8 +160,8 @@ Helper.HelperObject = new Class({
 	},
 
 	setTarget: function(target){
-		if (!Type.isObject(target)){
-			throw new TypeError('Specified target is not an object.');
+		if (!(Type.isObject(target) || target == null)){
+			throw new TypeError('Specified target is not an object or null.');
 		}
 		this._target = target;
 		return this;
