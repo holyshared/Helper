@@ -25,6 +25,7 @@ Helper.Orientation = new Class({
 
 	_name: 'orientation',
 	_handler: null,
+	_observer: win,
 
 	setup: function(){
 		this._handler = this._onOrientationChange.bind(this);
@@ -45,12 +46,23 @@ Helper.Orientation = new Class({
 		this.delegate(type);
 	},
 
+	_getObserver: function(){
+		var target = this.getTarget();
+		var observer = this.getObserver();
+		if (observer.toElement){
+			observer = observer.toElement();
+		}
+		return observer;
+	}.protect(),
+
 	enable: function() {
-		win.addEvent('orientationchange', this._handler);
+		var ovserver = this._getObserver();
+		ovserver.addEvent('orientationchange', this._handler);
 	},
 
 	disable: function() {
-		win.removeEvent('orientationchange', this._handler);
+		var ovserver = this._getObserver();
+		ovserver.removeEvent('orientationchange', this._handler);
 	}
 
 });

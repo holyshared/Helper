@@ -25,6 +25,7 @@ Helper.Keyboard = new Class({
 
 	_name: 'keyboard',
 	_handler: null,
+	_observer: doc,
 
 	_onKeydown: function(event){
 		if (!this.isEnable()) return;
@@ -32,16 +33,27 @@ Helper.Keyboard = new Class({
 		this.delegate(event.key);
 	},
 
+	_getObserver: function(){
+		var target = this.getTarget();
+		var observer = this.getObserver();
+		if (observer.toElement){
+			observer = observer.toElement();
+		}
+		return observer;
+	}.protect(),
+
 	setup: function(){
 		this._handler = this._onKeydown.bind(this);
 	},
 
 	enable: function() {
-		doc.addEvent('keydown', this._handler);
+		var ovserver = this._getObserver();
+		ovserver.addEvent('keydown', this._handler);
 	},
 
 	disable: function() {
-		doc.removeEvent('keydown', this._handler);
+		var ovserver = this._getObserver();
+		ovserver.removeEvent('keydown', this._handler);
 	}
 
 });

@@ -26,6 +26,7 @@ Helper.Swipe = new Class({
 
 	_name: 'swipe',
 	_handler: null,
+	_observer: doc.body,
 
 	setup: function(){
 		this._handler = this._onSwipe.bind(this);
@@ -37,12 +38,23 @@ Helper.Swipe = new Class({
 		this.delegate(event.direction);
 	},
 
+	_getObserver: function(){
+		var target = this.getTarget();
+		var observer = this.getObserver();
+		if (observer.toElement){
+			observer = observer.toElement();
+		}
+		return observer;
+	}.protect(),
+
 	enable: function() {
-		doc.body.addEvent('swipe', this._handler);
+		var ovserver = this._getObserver();
+		ovserver.addEvent('swipe', this._handler);
 	},
 
 	disable: function() {
-		doc.body.removeEvent('swipe', this._handler);
+		var ovserver = this._getObserver();
+		ovserver.removeEvent('swipe', this._handler);
 	}
 
 });

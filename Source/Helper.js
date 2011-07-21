@@ -122,6 +122,7 @@ Helper.HelperObject = new Class({
 
 	_name: null,
 	_target: null,
+	_observer: null,
 	_methods: {},
 	_enable: false,
 
@@ -131,22 +132,55 @@ Helper.HelperObject = new Class({
 
 	_prepare: function(options){
 		if (!options) return {};
-		var props = ['name', 'target', 'methods'];
+		var props = ['name', 'target', 'observer', 'methods'];
 		props.each(function(key){
 			if (options[key]) {
-				this['_' + key] = options[key];
+				var method = key.capitalize();
+				var setter = 'set' + method;
+				if (this[setter]) {
+					var handler = this[setter];
+					handler(options[key]);
+				}
 				delete options[key];
 			}
 		}, this);
 		return options;
 	},
 
+	setName: function(name){
+		if (!Type.isString(name)){
+			throw new TypeError('Name should be a character string.');
+		}
+		this._name = name;
+		return this;
+	},
+
 	getName: function(){
 		return this._name;
 	},
 
+	setTarget: function(target){
+		if (!Type.isObject(target)){
+			throw new TypeError('Specified target is not an object.');
+		}
+		this._target = target;
+		return this;
+	},
+
 	getTarget: function(){
 		return this._target;
+	},
+
+	setObserver: function(observer){
+		if (!(Type.isObject(observer) || Type.isElement(observer))){
+			throw new TypeError('Specified observer is an object or not element.');
+		}
+		this._observer = observer;
+		return this;
+	},
+
+	getObserver: function(){
+		return this._observer;
 	},
 
 	setEnable: function(value){
@@ -164,17 +198,17 @@ Helper.HelperObject = new Class({
 		if (!Type.isObject(control)) {
 			throw new TypeError('It is an invalid object.');
 		}
+		this.setTarget(control);
 		this.setup();
 		if (!this.isEnable()) {
 			this.setEnable(true);
 		}
-		this._target = control;
 		return this;
 	},
 
 	unbind: function(){
 		this.setEnable(false);
-		this._target = null;
+		this.setTarget(null);
 	},
 
 	isEnable: function(){
@@ -198,6 +232,11 @@ Helper.HelperObject = new Class({
 			methods.push(this.getMethod(key));
 		}, this);
 		return methods;
+	},
+
+	setMethods: function(methods) {
+		this._methods = {};
+		this.addMethods(methods);
 	},
 
 	addMethod: function(key, method){

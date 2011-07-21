@@ -24,7 +24,7 @@ Helper
 
 
 
-Helper.AbstractHelper
+Helper.HelperObject
 -------------------------------------------------
 
 ### Events
@@ -34,8 +34,12 @@ Helper.AbstractHelper
 
 ### Methods
 
+* setName
 * getName
+* setTarget
 * getTarget
+* setObserver
+* getObserver
 * setEnable
 * bind
 * unbind
@@ -44,6 +48,7 @@ Helper.AbstractHelper
 * isEnable
 * getMethod
 * getMethods
+* setMethods
 * addMethod
 * addMethods
 * removeMethod
@@ -80,28 +85,52 @@ Helper.Keyboard
 
 ### Extends
 
-Helper.AbstractHelper
+Helper.HelperObject
 
 ### Events
 
-* onEnable
-* onDisable
+It is the same as the event of Helper.HelperObject.
 
 ### Methods
 
-* getName
-* getTarget
-* setEnable
-* bind
-* unbind
-* enable
-* disable
-* isEnable
-* getMethod
-* getMethods
-* addMethod
-* addMethods
-* removeMethod
-* removeMethods
-* hasMethod
-* delegate
+It is the same as the method of Helper.HelperObject.
+
+
+
+Helper.Swipe
+-------------------------------------------------
+
+	var Controller = new Class({
+	
+		Implements: [Helper] //Helper building in of the controller object
+
+		prev: function(){
+			//do something
+		},
+
+		next: function(){
+			//do something
+		}
+
+	});
+
+	var controller = new Controller();
+
+	var helper = new Helper.Swipe();
+	helper.addMethods({
+		left: 'prev',
+		right: 'next'
+	});
+	controller.addHelper(helper);
+
+### Extends
+
+Helper.HelperObject
+
+### Events
+
+It is the same as the event of Helper.HelperObject.
+
+### Methods
+
+It is the same as the method of Helper.HelperObject.
