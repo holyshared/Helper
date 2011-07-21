@@ -36,7 +36,17 @@ var Helper = this.Helper = new Class({
 
 	addHelper: function(helper){
 		var bindHelper = validateHelper(helper);
-		bindHelper.bind(this);
+
+		bindHelper.addEvents({
+			enable: function(){
+				this.fireEvent('enableHelper', [bindHelper]);
+			},
+			disable: function(){
+				this.fireEvent('disableHelper', [bindHelper]);
+			}
+		})
+		.bind(this);
+
 		var key = bindHelper.getName();
 		this._helpers[key] = bindHelper;
 		return this;
@@ -139,7 +149,7 @@ Helper.HelperObject = new Class({
 				var setter = 'set' + method;
 				if (this[setter]) {
 					var handler = this[setter];
-					handler(options[key]);
+					handler.call(this, options[key]);
 				}
 				delete options[key];
 			}

@@ -7,10 +7,15 @@ How to use
 ------------------------------------------------------------------------
 
 
-Screenshots
+
+Build packages
 ------------------------------------------------------------------------
 
-![Screenshot2](url_to_image2)
-![Screenshot3](url_to_image3)
-![Screenshot4](url_to_image4)
-![Screenshot5](url_to_image5)
+### Mootools Core
+packager build Core/Class.Extras Core/DOMReady -blocks 1.2compat
+
+### Mootools Mobile
+packager build Mobile/Swipe -packages Core > mootools-mobile.js
+
+### Helper
+packager build Helper/* +use-only Helper > helper.js

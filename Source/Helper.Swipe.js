@@ -26,9 +26,13 @@ Helper.Swipe = new Class({
 
 	_name: 'swipe',
 	_handler: null,
-	_observer: doc.body,
 
 	setup: function(){
+		var observer = this.getObserver();
+		if (!observer) {
+			//It is assumption that dom is constructed.
+			this.setObserver(doc.body);
+		}
 		this._handler = this._onSwipe.bind(this);
 	},
 

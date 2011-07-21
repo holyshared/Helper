@@ -1,29 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		<title>Plugin Demo</title>
+		<title>Helper</title>
 		<meta name="description" content="" />
-		<meta name="author" content="operator" />
+		<meta name="author" content="Noritaka Horio" />
 		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
-		<link rel="shortcut icon" href="/favicon.ico" />
-		<script type="text/javascript" src="js/lib/mootools-core-1.3.1.js"></script>
+		<script type="text/javascript" src="js/lib/mootools-core.js"></script>
+		<script type="text/javascript" src="js/lib/mootools-mobile.js"></script>
+		<script type="text/javascript" src="js/lib/helper-compressed.js"></script>
+		<script type="text/javascript" src="js/controller.js"></script>
+		<script type="text/javascript" src="js/runner.js"></script>
 	</head>
 	<body>
-		<div class="page">
-		    <header>
-		    	<h1>Demo</h1>
+		<article class="page">
+			<header>
+		    	<h1>Helper</h1>
 		    </header>
-		    <nav>
-		    </nav>
 
-		    <div class="main">
-		    </div>
+		    <section>
+		    	<h2>Helper</h2>
+			    <section>
+			    	<h3>Keyboard</h3>
+					<p><button id="keyboardEnable" type="button">enable</button> | <button id="keyboardDisable" type="button">disable</button></p>
+			    </section>
+			    <section>
+			    	<h3>Swipe</h3>
+					<p><button id="swipeEnable" type="button">enable</button> | <button id="swipeDisable" type="button">disable</button></p>
+			    </section>
+			    <section>
+			    	<h3>Orientation</h3>
+					<p><button id="orientationEnable" type="button">enable</button> | <button id="orientationDisable" type="button">disable</button></p>
+			    </section>
+		    </section>
 
 		    <footer>
-				<p>&copy; Copyright 2011 by [author]</p>
+				<p>Copyright 2011 Noritaka Horio all rights reserved.</p>
 		    </footer>
-		</div>
+		</article>
 	</body>
 </html>
