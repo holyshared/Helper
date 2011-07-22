@@ -1,8 +1,9 @@
 (function(win, doc){
 
 Object.append(Element.NativeEvents, {
-	webkitAnimationEnd: 1,
-	animationend: 1
+	webkitAnimationEnd: 2, //Safari, Chrome
+	animationend: 2, //Firefox
+	oTransitionEnd: 2 //Opera
 });
 
 
@@ -46,12 +47,13 @@ var StatusView = this.StatusView = new Class({
 
 	initialize: function(container){
 		var type = '';
-		if (Browser.firefox){
+		if (Browser.opera){
+			type = 'oAnimationEnd';
+		} else if (Browser.firefox){
 			type = 'animationend';
 		} else if (Browser.safari || Browser.chrome) {
 			type = 'webkitAnimationEnd';
 		}
-
 		this.container = container;
 		this.container.addEvent(type, function(event){
 			container.removeClass('highlight');
