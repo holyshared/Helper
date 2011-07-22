@@ -7,6 +7,7 @@
 		<meta name="description" content="" />
 		<meta name="author" content="Noritaka Horio" />
 		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
+		<link rel="stylesheet" href="css/style.css" media="screen,print" />
 		<script type="text/javascript" src="js/lib/mootools-core.js"></script>
 		<script type="text/javascript" src="js/lib/mootools-mobile.js"></script>
 		<script type="text/javascript" src="js/lib/helper-compressed.js"></script>
@@ -18,20 +19,20 @@
 			<header>
 		    	<h1>Helper</h1>
 		    </header>
-
+			<p id="status" class="message">The message is displayed here.</p>
 		    <section>
-		    	<h2>Helper</h2>
+		    	<h2>Helper switches</h2>
 			    <section>
 			    	<h3>Keyboard</h3>
-					<p><button id="keyboardEnable" type="button">enable</button> | <button id="keyboardDisable" type="button">disable</button></p>
+					<p><button id="keyboardEnable" type="button" class="disable">enable</button> <button id="keyboardDisable" type="button">disable</button></p>
 			    </section>
 			    <section>
 			    	<h3>Swipe</h3>
-					<p><button id="swipeEnable" type="button">enable</button> | <button id="swipeDisable" type="button">disable</button></p>
+					<p><button id="swipeEnable" type="button" class="disable">enable</button> <button id="swipeDisable" type="button">disable</button></p>
 			    </section>
 			    <section>
 			    	<h3>Orientation</h3>
-					<p><button id="orientationEnable" type="button">enable</button> | <button id="orientationDisable" type="button">disable</button></p>
+					<p><button id="orientationEnable" type="button" class="disable">enable</button> <button id="orientationDisable" type="button">disable</button></p>
 			    </section>
 		    </section>
 

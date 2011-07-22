@@ -302,3 +302,205 @@ Helper.HelperObject = new Class({
 new Type('Helper', Helper.HelperObject);
 
 }());
+
+/*
+---
+name: Helper.Keyboard
+
+description: The input with the keyboard is notified to the related specific object.
+
+license: MIT-style
+
+authors:
+- Noritaka Horio
+
+requires:
+  - Helper/Helper.HelperObject
+
+provides:
+  - Helper.Keyboard
+...
+*/
+
+(function(doc, Helper){
+
+Helper.Keyboard = new Class({
+
+	Extends: Helper.HelperObject,
+
+	_name: 'keyboard',
+	_handler: null,
+	_observer: doc,
+
+	_onKeydown: function(event){
+		if (!this.isEnable()) return;
+		if (!this.hasMethod(event.key)) return;
+		this.delegate(event.key);
+	},
+
+	_getObserver: function(){
+		var target = this.getTarget();
+		var observer = this.getObserver();
+		if (observer.toElement){
+			observer = observer.toElement();
+		}
+		return observer;
+	}.protect(),
+
+	setup: function(){
+		this._handler = this._onKeydown.bind(this);
+	},
+
+	enable: function() {
+		var ovserver = this._getObserver();
+		ovserver.addEvent('keydown', this._handler);
+	},
+
+	disable: function() {
+		var ovserver = this._getObserver();
+		ovserver.removeEvent('keydown', this._handler);
+	}
+
+});
+
+}(document, Helper));
+
+/*
+---
+name: Helper.Swipe
+
+description: The swipe operation is notified to a relating specific object.
+
+license: MIT-style
+
+authors:
+- Noritaka Horio
+
+requires:
+  - Mobile/Swipe
+  - Helper/Helper.HelperObject
+
+provides:
+  - Helper.Swipe
+...
+*/
+
+(function(doc, Helper){
+
+Helper.Swipe = new Class({
+
+	Extends: Helper.HelperObject,
+
+	_name: 'swipe',
+	_handler: null,
+
+	setup: function(){
+		var observer = this.getObserver();
+		if (!observer) {
+			//It is assumption that dom is constructed.
+			this.setObserver(doc.body);
+		}
+		this._handler = this._onSwipe.bind(this);
+	},
+
+	_onSwipe: function(event){
+		if (!this.isEnable()) return;
+		if (!this.hasMethod(event.direction)) return;
+		this.delegate(event.direction);
+	},
+
+	_getObserver: function(){
+		var target = this.getTarget();
+		var observer = this.getObserver();
+		if (observer.toElement){
+			observer = observer.toElement();
+		}
+		return observer;
+	}.protect(),
+
+	enable: function() {
+		var ovserver = this._getObserver();
+		ovserver.addEvent('swipe', this._handler);
+	},
+
+	disable: function() {
+		var ovserver = this._getObserver();
+		ovserver.removeEvent('swipe', this._handler);
+	}
+
+});
+
+}(document, Helper));
+
+
+/*
+---
+name: Helper.Orientation
+
+description: The object that specifies the change of orientation is notified.
+
+license: MIT-style
+
+authors:
+- Noritaka Horio
+
+requires:
+  - Helper/Helper.HelperObject
+
+provides:
+  - Helper.Orientation
+...
+*/
+
+(function(win, Helper){
+
+Helper.Orientation = new Class({
+
+	Extends: Helper.HelperObject,
+
+	_name: 'orientation',
+	_handler: null,
+	_observer: win,
+
+	setup: function(){
+		this._handler = this._onOrientationChange.bind(this);
+	},
+
+	_onOrientationChange: function(event){
+		var type = '';
+		var orientation = win.orientation;
+		//landscape
+		if (orientation == 90 || orientation == -90) {
+			type = 'landscape';
+		//portrait
+		} else if (orientation == 0 || orientation == 180) {
+			type = 'portrait';
+		}
+		if (!this.isEnable()) return;
+		if (!this.hasMethod(type)) return;
+		this.delegate(type);
+	},
+
+	_getObserver: function(){
+		var target = this.getTarget();
+		var observer = this.getObserver();
+		if (observer.toElement){
+			observer = observer.toElement();
+		}
+		return observer;
+	}.protect(),
+
+	enable: function() {
+		var ovserver = this._getObserver();
+		ovserver.addEvent('orientationchange', this._handler);
+	},
+
+	disable: function() {
+		var ovserver = this._getObserver();
+		ovserver.removeEvent('orientationchange', this._handler);
+	}
+
+});
+
+}(window, Helper));
+

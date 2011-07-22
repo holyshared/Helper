@@ -1,0 +1,101 @@
+@charset "utf-8"
+
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+article, section, header, footer {
+	display: block;
+}
+
+body {
+	font-size: 62.5%;
+	font-family: Sylfaen, "Times New Roman", serif;
+	line-height: 160%;
+}
+
+h1 {
+	font-size: 3.0em;
+	font-weight: normal;
+	color: #305c82;
+}
+
+h2 {
+	font-size: 1.8em;
+	font-weight: normal;
+	color: #333333;
+}
+
+h3 {
+	font-size: 1.6em;
+	font-weight: normal;
+	color: #333333;
+}
+
+p, dt, dd, ul, ol {
+	font-size: 1.4em;
+}
+
+.highlight {
+	-webkit-animation: ease-in;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-name: highlight;
+
+	-moz-animation: ease-in;
+	-moz-animation-duration: 1s;
+	-moz-animation-name: highlight;
+
+	animation: ease-in;
+	animation-duration: 1s;
+	animation-name: highlight;
+	animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes highlight {
+	from{ background: #333333;}
+	33%{ background: #006699;}
+    66%{ background: #333333;}
+    99%{ background: #006699;}
+    to{ background: #333333;}
+}
+
+@-moz-keyframes highlight {
+	from{ background: #333333;}
+	33%{ background: #006699;}
+    66%{ background: #333333;}
+    99%{ background: #006699;}
+    to{ background: #333333;}
+}
+
+
+@keyframes highlight {
+	from{ background: #333333;}
+	33%{ background: #006699;}
+    66%{ background: #333333;}
+    99%{ background: #006699;}
+    to{ background: #333333;}
+}
+
+.message {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	padding: 10px 15px;
+	border: 1px solid #cccccc;	
+}
+
+button,
+button.enable {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border: 1px solid #cccccc;
+	padding: 5px 15px;
+	text-transform: capitalize;
+}
+
+button.disable {
+	color: #cccccc;
+	background: #efefef;
+}
