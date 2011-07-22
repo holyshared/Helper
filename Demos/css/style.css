@@ -53,28 +53,27 @@ p, dt, dd, ul, ol {
 }
 
 @-webkit-keyframes highlight {
-	from{ background: #333333;}
-	33%{ background: #006699;}
-    66%{ background: #333333;}
-    99%{ background: #006699;}
-    to{ background: #333333;}
+	from{ background: #e1f3f4;}
+	33%{ background: #c3e2e3;}
+    66%{ background: #e1f3f4;}
+    99%{ background: #c3e2e3;}
+    to{ background: #e1f3f4;}
 }
 
 @-moz-keyframes highlight {
-	from{ background: #333333;}
-	33%{ background: #006699;}
-    66%{ background: #333333;}
-    99%{ background: #006699;}
-    to{ background: #333333;}
+	from{ background: #e1f3f4;}
+	33%{ background: #c3e2e3;}
+    66%{ background: #e1f3f4;}
+    99%{ background: #c3e2e3;}
+    to{ background: #e1f3f4;}
 }
 
-
 @keyframes highlight {
-	from{ background: #333333;}
-	33%{ background: #006699;}
-    66%{ background: #333333;}
-    99%{ background: #006699;}
-    to{ background: #333333;}
+	from{ background: #e1f3f4;}
+	33%{ background: #c3e2e3;}
+    66%{ background: #e1f3f4;}
+    99%{ background: #c3e2e3;}
+    to{ background: #e1f3f4;}
 }
 
 .message {

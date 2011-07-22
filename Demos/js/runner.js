@@ -4,11 +4,11 @@ window.addEvent('domready', function(){
 
 	var swipeHelper = new Helper.Swipe({
 		methods: {
-			left: 'prevAction',
-			right: 'nextAction'
+			left: 'nextAction',
+			right: 'prevAction'
 		}
 	});
-	
+
 	var keyboardHelper = new Helper.Keyboard({
 		methods: {
 			p: 'prevAction',
