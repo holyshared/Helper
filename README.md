@@ -1,7 +1,7 @@
 Helper
 ====================================
 
-[Mootools Helper Plugin](http://holyshared.github.com/Helper/logo.png "Mootools Helper Plugin")
+![Mootools Helper Plugin](http://holyshared.github.com/Helper/logo.png "Mootools Helper Plugin")
 
 The helper is a library where a specific function can do in plug and play.  
 It is convenient to want to notify objects of what loans the change in the state when a specific event is generated on the application. 
