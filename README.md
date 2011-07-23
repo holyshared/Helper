@@ -17,7 +17,7 @@ The helper can freely build in the miscellaneous function, comes, and can do a s
 In the following example, the following has been achieved by using the helper. 
 
 * When p key is typed, and the prev method and n key to the slide show are typed, the next method of the slide show is executed and the image is switched. 
-* The next method of the slide show is executed when Swipe is done and the image is switched to the prev method and the left of the slide show when Swipe is done right. 
+* The next method of the slide show is executed when swipe is done and the image is switched to the prev method and the left of the slide show when swipe is done right. 
 
 ### Sample code
 
