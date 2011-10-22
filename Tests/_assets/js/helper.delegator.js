@@ -1,24 +1,8 @@
-<script type="text/javascript" src="/depender/build?require=Element.Event,Helper/Helper.HelperObject"></script>
-<script type="text/javascript">
 (function(doc){
-
-	var Controller = new Class({
-
-		Implements: [Helper],
-
-		prev: function(index){
-			alert('prev');
-		},
-
-		next: function(index){
-			alert('next');
-		}
-
-	});
 
 	var ControllerHelper = new Class({
 
-		Extends: Helper.HelperObject,
+		Extends: Helper.Delegator,
 
 		_name: 'controllerHelper',
 
@@ -36,11 +20,11 @@
 		},
 
 		_onNext: function(event){
-			this.delegate('prev');
+			this.delegate('next');
 		},
 
 		_onPrev: function(event){
-			this.delegate('next');
+			this.delegate('prev');
 		},
 
 		enable: function(){
@@ -138,45 +122,8 @@
 			}
 		});
 
-		testcases.push({
-			title: 'bind',
-			description : 'bind method testcase',
-			fn: function(){
-				test2Helper.bind(controller);
-				log ( (test2Enable) ? 'assert ok' : 'helper is disable' );
-			}
-		});
-
-		testcases.push({
-			title: 'unbind',
-			description : 'unbind method testcase',
-			fn: function(){
-				test2Helper.unbind();
-				log ( (test2Disable) ? 'assert ok' : 'helper is disable' );
-			}
-		});
-
-		testcases.push({
-			title: 'enable',
-			description : 'enable method testcase',
-			fn: function(){
-				controller.enableHelper('controllerHelper');
-				log ( (enable) ? 'assert ok - helper is enalbed' : 'aa' );
-			}
-		});
-
-		testcases.push({
-			title: 'disable',
-			description : 'disable method testcase',
-			fn: function(){
-				controller.disableHelper('controllerHelper');
-				log ( (disable) ? 'assert ok - helper is disable' : 'bb' );
-			}
-		});
-
 		makeActions(testcases);
 
 	}, false);
 
 }(document));
-</script>
