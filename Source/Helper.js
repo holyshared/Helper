@@ -236,7 +236,9 @@ Helper.Pluggable = new Class({
 			throw new TypeError('It is an invalid object.');
 		}
 		this.setTarget(control);
-		this._setupHelper();
+		if (this.isSetuped() === false) {
+			this._setupHelper();
+		}
 		if (!this.isEnable()) {
 			this.setEnable(true);
 		}
