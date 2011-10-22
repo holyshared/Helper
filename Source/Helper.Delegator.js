@@ -2,7 +2,7 @@
 ---
 name: Helper.Delegator
 
-description:
+description: Delegate of the event is carried out to the object object incorporating a helper function.
 
 license: MIT-style
 
