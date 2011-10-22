@@ -24,7 +24,7 @@ Helper.Delegator = new Class({
 
 	Implements: [Helper.Pluggable],
 
-	Properties: ['name', 'target', 'observer', 'methods'],
+	Properties: ['name', 'target', 'observer', 'methods', 'enable'],
 
 	_observer: null,
 	_methods: {},

@@ -160,11 +160,12 @@ Helper.Pluggable = new Class({
 
 	Implements: [Options, Events],
 
-	Properties: ['name', 'target'],
+	Properties: ['name', 'target', 'enable'],
 
 	_name: null,
 	_target: null,
 	_enable: false,
+	_setuped: false,
 
 	initialize: function(options) {
 		this.setOptions(options);
@@ -210,6 +211,10 @@ Helper.Pluggable = new Class({
 		if (this.isEnable() == value) {
 			return;
 		}
+		if (this.isSetuped() === false) {
+			this._setupHelper();
+		}
+
 		var eventType = (value) ? 'enable' : 'disable';
 		this[eventType]();
 		this.fireEvent(eventType);
@@ -217,12 +222,21 @@ Helper.Pluggable = new Class({
 		return this;
 	},
 
+	_setupHelper: function(){
+		this.setup();
+		this._setuped = true;
+	},
+
+	isSetuped: function(){
+		return this._setuped;
+	},
+
 	bind: function(control){
 		if (!Type.isObject(control)) {
 			throw new TypeError('It is an invalid object.');
 		}
 		this.setTarget(control);
-		this.setup();
+		this._setupHelper();
 		if (!this.isEnable()) {
 			this.setEnable(true);
 		}

@@ -50,7 +50,9 @@
 		var enable = false;
 		var disable = false;
 
-		var controller = new Controller();
+		var controller = new Controller({
+			enable: false
+		});
 
 		var helper = new ControllerHelper();
 		helper.addEvents({
@@ -68,7 +70,9 @@
 		var test2Disable = false;
 
 		var test2Controller = new Controller();
-		var test2Helper = new ControllerHelper();
+		var test2Helper = new ControllerHelper({
+			enable: true
+		});
 		test2Helper.addEvents({
 			enable: function() {
 				test2Enable = true;
