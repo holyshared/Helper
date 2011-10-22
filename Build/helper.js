@@ -17,14 +17,15 @@ requires:
 
 provides:
   - Helper
-  - Helper.HelperObject
+  - Helper.Properties
+  - Helper.Pluggable
 ...
 */
 
 (function(){
 
 function validateHelper(helper) {
-	if (!Type.isHelper(helper)){
+	if (!(Type.isFunction(helper.bind) && Type.isFunction(helper.unbind))) {
 		throw new TypeError('It is an invalid helper.');
 	}
 	return helper;
@@ -127,35 +128,47 @@ var Helper = this.Helper = new Class({
 });
 
 
-Helper.HelperObject = new Class({
+Helper.Properties = {
+
+    Properties: function(properties){
+        if (!this.prototype.setOptions) return;
+        var setOptions = this.prototype.setOptions;
+        var decorator = function(options){
+			if (!options) return;
+            properties.each(function(key){
+                if (options[key]) {
+                    var method = key.capitalize();
+                    var setter = 'set' + method;
+                    if (this[setter]) {
+                        var handler = this[setter];
+                        handler.call(this, options[key]);
+                    }
+                    delete options[key];
+                }
+            }, this);
+            setOptions(options);
+        };
+        this.prototype.setOptions = decorator;
+    }
+
+};
+
+Object.append(Class.Mutators, Helper.Properties);
+
+
+Helper.Pluggable = new Class({
 
 	Implements: [Options, Events],
 
+	Properties: ['name', 'target', 'enable'],
+
 	_name: null,
 	_target: null,
-	_observer: null,
-	_methods: {},
 	_enable: false,
+	_setuped: false,
 
 	initialize: function(options) {
-		this.setOptions(this._prepare(options));
-	},
-
-	_prepare: function(options){
-		if (!options) return {};
-		var props = ['name', 'target', 'observer', 'methods'];
-		props.each(function(key){
-			if (options[key]) {
-				var method = key.capitalize();
-				var setter = 'set' + method;
-				if (this[setter]) {
-					var handler = this[setter];
-					handler.call(this, options[key]);
-				}
-				delete options[key];
-			}
-		}, this);
-		return options;
+		this.setOptions(options);
 	},
 
 	setName: function(name){
@@ -198,6 +211,10 @@ Helper.HelperObject = new Class({
 		if (this.isEnable() == value) {
 			return;
 		}
+		if (this.isSetuped() === false) {
+			this._setupHelper();
+		}
+
 		var eventType = (value) ? 'enable' : 'disable';
 		this[eventType]();
 		this.fireEvent(eventType);
@@ -205,12 +222,23 @@ Helper.HelperObject = new Class({
 		return this;
 	},
 
+	_setupHelper: function(){
+		this.setup();
+		this._setuped = true;
+	},
+
+	isSetuped: function(){
+		return this._setuped;
+	},
+
 	bind: function(control){
 		if (!Type.isObject(control)) {
 			throw new TypeError('It is an invalid object.');
 		}
 		this.setTarget(control);
-		this.setup();
+		if (this.isSetuped() === false) {
+			this._setupHelper();
+		}
 		if (!this.isEnable()) {
 			this.setEnable(true);
 		}
@@ -224,6 +252,57 @@ Helper.HelperObject = new Class({
 
 	isEnable: function(){
 		return (this._enable) ? true : false;
+	}
+
+});
+
+}());
+
+/*
+---
+name: Helper.Delegator
+
+description: Delegate of the event is carried out to the object object incorporating a helper function.
+
+license: MIT-style
+
+authors:
+- Noritaka Horio
+
+requires:
+  - Helper/Helper.Pluggable
+  - Helper/Helper.Properties
+
+provides:
+  - Helper.Delegator
+...
+*/
+
+(function(doc, Helper){
+
+Helper.Delegator = new Class({
+
+	Implements: [Helper.Pluggable],
+
+	Properties: ['name', 'target', 'observer', 'methods', 'enable'],
+
+	_observer: null,
+	_methods: {},
+
+	initialize: function(options) {
+		this.setOptions(options);
+	},
+
+	setObserver: function(observer){
+		if (!(Type.isObject(observer) || Type.isElement(observer))){
+			throw new TypeError('Specified observer is an object or not element.');
+		}
+		this._observer = observer;
+		return this;
+	},
+
+	getObserver: function(){
+		return this._observer;
 	},
 
 	getMethod: function(key){
@@ -299,9 +378,7 @@ Helper.HelperObject = new Class({
 
 });
 
-new Type('Helper', Helper.HelperObject);
-
-}());
+}(document, Helper));
 
 /*
 ---
@@ -315,7 +392,7 @@ authors:
 - Noritaka Horio
 
 requires:
-  - Helper/Helper.HelperObject
+  - Helper/Helper.Delegator
 
 provides:
   - Helper.Keyboard
@@ -326,7 +403,7 @@ provides:
 
 Helper.Keyboard = new Class({
 
-	Extends: Helper.HelperObject,
+	Extends: Helper.Delegator,
 
 	_name: 'keyboard',
 	_handler: null,
@@ -378,7 +455,7 @@ authors:
 
 requires:
   - Mobile/Swipe
-  - Helper/Helper.HelperObject
+  - Helper/Helper.Delegator
 
 provides:
   - Helper.Swipe
@@ -389,7 +466,7 @@ provides:
 
 Helper.Swipe = new Class({
 
-	Extends: Helper.HelperObject,
+	Extends: Helper.Delegator,
 
 	_name: 'swipe',
 	_handler: null,
@@ -445,7 +522,7 @@ authors:
 - Noritaka Horio
 
 requires:
-  - Helper/Helper.HelperObject
+  - Helper/Helper.Delegator
 
 provides:
   - Helper.Orientation
@@ -456,7 +533,7 @@ provides:
 
 Helper.Orientation = new Class({
 
-	Extends: Helper.HelperObject,
+	Extends: Helper.Delegator,
 
 	_name: 'orientation',
 	_handler: null,
