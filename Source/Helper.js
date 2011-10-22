@@ -17,14 +17,15 @@ requires:
 
 provides:
   - Helper
-  - Helper.HelperObject
+  - Helper.Properties
+  - Helper.Pluggable
 ...
 */
 
 (function(){
 
 function validateHelper(helper) {
-	if (!Type.isHelper(helper)){
+	if (!(Type.isFunction(helper.bind) && Type.isFunction(helper.unbind))) {
 		throw new TypeError('It is an invalid helper.');
 	}
 	return helper;
@@ -127,35 +128,46 @@ var Helper = this.Helper = new Class({
 });
 
 
-Helper.HelperObject = new Class({
+Helper.Properties = {
+
+    Properties: function(properties){
+        if (!this.prototype.setOptions) return;
+        var setOptions = this.prototype.setOptions;
+        var decorator = function(options){
+			if (!options) return;
+            properties.each(function(key){
+                if (options[key]) {
+                    var method = key.capitalize();
+                    var setter = 'set' + method;
+                    if (this[setter]) {
+                        var handler = this[setter];
+                        handler.call(this, options[key]);
+                    }
+                    delete options[key];
+                }
+            }, this);
+            setOptions(options);
+        };
+        this.prototype.setOptions = decorator;
+    }
+
+};
+
+Object.append(Class.Mutators, Helper.Properties);
+
+
+Helper.Pluggable = new Class({
 
 	Implements: [Options, Events],
 
+	Properties: ['name', 'target'],
+
 	_name: null,
 	_target: null,
-	_observer: null,
-	_methods: {},
 	_enable: false,
 
 	initialize: function(options) {
-		this.setOptions(this._prepare(options));
-	},
-
-	_prepare: function(options){
-		if (!options) return {};
-		var props = ['name', 'target', 'observer', 'methods'];
-		props.each(function(key){
-			if (options[key]) {
-				var method = key.capitalize();
-				var setter = 'set' + method;
-				if (this[setter]) {
-					var handler = this[setter];
-					handler.call(this, options[key]);
-				}
-				delete options[key];
-			}
-		}, this);
-		return options;
+		this.setOptions(options);
 	},
 
 	setName: function(name){
@@ -224,81 +236,8 @@ Helper.HelperObject = new Class({
 
 	isEnable: function(){
 		return (this._enable) ? true : false;
-	},
-
-	getMethod: function(key){
-		if (!this.hasMethod(key)) {
-			throw new Error('The specification ' + key + ' method is not found.');
-		}
-		return this._methods[key];
-	},
-
-	getMethods: function(){
-		var methods = [];
-		var names = Array.from(arguments);
-		if (names.length <= 0) {
-			names = Object.keys(this._methods);
-		}
-		names.each(function(key){
-			methods.push(this.getMethod(key));
-		}, this);
-		return methods;
-	},
-
-	setMethods: function(methods) {
-		this._methods = {};
-		this.addMethods(methods);
-	},
-
-	addMethod: function(key, method){
-		if (this.hasMethod(method)) {
-			return;
-		}
-		this._methods[key] = method;
-		return this;
-	},
-
-	addMethods: function(methods){
-		for (var key in methods) {
-			this.addMethod(key, methods[key]);
-		}
-		return this;
-	},
-
-	removeMethod: function(key){
-		if (!this.hasMethod(key)) {
-			throw new TypeError('Because method ' + key + ' doesn\'t exist, it is not possible to delete it.');
-		}
-		delete this._methods[key];
-		return this;
-	},
-
-	removeMethods: function(){
-		var methods = Array.from(arguments);
-		if (methods.length <= 0) {
-			methods = this.getMethods();
-		}
-		methods.each(function(method){
-			this.removeMethod(method);
-		}, this);
-		return this;
-	},
-
-	hasMethod: function(key){
-		return (this._methods[key]) ? true : false;
-	},
-
-	delegate: function(key, args){
-		var method = this.getMethod(key);
-		var target = this.getTarget();
-		if (!Type.isFunction(target[method])) {
-			throw new Error('Method ' + method + ' doesn\'t exist or it is an invalid method.');
-		}
-		target[method].apply(target, args);
 	}
 
 });
-
-new Type('Helper', Helper.HelperObject);
 
 }());

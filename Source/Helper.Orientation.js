@@ -10,7 +10,7 @@ authors:
 - Noritaka Horio
 
 requires:
-  - Helper/Helper.HelperObject
+  - Helper/Helper.Delegator
 
 provides:
   - Helper.Orientation
@@ -21,7 +21,7 @@ provides:
 
 Helper.Orientation = new Class({
 
-	Extends: Helper.HelperObject,
+	Extends: Helper.Delegator,
 
 	_name: 'orientation',
 	_handler: null,

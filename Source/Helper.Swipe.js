@@ -11,7 +11,7 @@ authors:
 
 requires:
   - Mobile/Swipe
-  - Helper/Helper.HelperObject
+  - Helper/Helper.Delegator
 
 provides:
   - Helper.Swipe
@@ -22,7 +22,7 @@ provides:
 
 Helper.Swipe = new Class({
 
-	Extends: Helper.HelperObject,
+	Extends: Helper.Delegator,
 
 	_name: 'swipe',
 	_handler: null,

@@ -10,7 +10,7 @@ authors:
 - Noritaka Horio
 
 requires:
-  - Helper/Helper.HelperObject
+  - Helper/Helper.Delegator
 
 provides:
   - Helper.Keyboard
@@ -21,7 +21,7 @@ provides:
 
 Helper.Keyboard = new Class({
 
-	Extends: Helper.HelperObject,
+	Extends: Helper.Delegator,
 
 	_name: 'keyboard',
 	_handler: null,
