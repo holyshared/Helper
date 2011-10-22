@@ -12,6 +12,7 @@ copyright: "&copy; [Noritaka Horio](http://sharedhat.com)"
 
 sources:
   - "Source/Helper.js"
+  - "Source/Helper.Delegator.js"
   - "Source/Helper.Keyboard.js"
   - "Source/Helper.Swipe.js"
   - "Source/Helper.Orientation.js"
