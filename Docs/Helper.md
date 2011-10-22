@@ -54,23 +54,95 @@ When the state changes, each helper executes the method of the object object.
 * **isDisableHelper** (string) - It is confirmed whether the helper is invalid.
 
 
-Helper.HelperObject
+Helper.Pluggable
 -------------------------------------------------
 
-HelperObject should mount setup, enable, and the disable method in an abstract class.  
+Pluggable should mount setup, enable, and the disable method in an abstract class.  
 The role of each method is as follows.  
 
 * **setup** - Helper is initialized.
 * **enable** - Helper is made effective.
 * **disable** - Helper is nullified.
 
-The example that uses HelperObject is as follows.  
+The example that uses Pluggable is as follows.  
+
+	Helper.StatusView = new Class({
+
+		Implements: [Helper.Pluggable],
+
+		_name: 'statusView',
+		_change: null,
+
+		_onChange: function(index, total){
+			this._current.set('html', index);
+			this._total.set('html', total);
+		},
+
+		/*-----------------------------
+			ABSTRACT METHODS
+		-----------------------------*/
+		//Method of initializing helper.
+		setup: function(){
+			var target = this.getTarget();
+			this._container = new Element('p');
+			this._current = new Element('span');
+			this._total = new Element('span');
+			this._container.adopt([this._current, this._total]);
+			this._container.inject($(target));
+			this._change = this._onChange.bind(this);
+		},
+
+		//The helper is made effective.
+		enable: function() {
+			var target = this.getTarget();
+			target.addEvent('change', this._change);
+		},
+	
+		//The helper is nullified. 
+		disable: function() {
+			var target = this.getTarget();
+			target.removeEvent('change', this._change);
+		}
+	
+	});
+
+
+### Events
+
+* **onEnable** - When the helper becomes effective, it is generated. 
+* **onDisable** - When the helper becomes invalid, it is generated.
+
+### Methods
+
+* **setName** (string) - The helper name is set.
+* **getName** - The helper name is acquired. 
+* **setTarget** (object) - The related object is specified. 
+* **getTarget** - The related object is acquired. 
+* **setEnable** (boolean) - The helper effective/is invalidated. 
+* **bind** (object) - The helper is related. 
+* **unbind** - Helper's relation is released. 
+* **isEnable** - Whether the helper is effective is confirmed. 
+
+### Abstract Methods
+
+* **setup** - Helper is initialized.
+* **enable** - Helper is made effective.
+* **disable** - Helper is nullified.
+
+
+Helper.Delegator
+-------------------------------------------------
+
+**Helper.Delegator** carries out delegate of the event to the object object incorporating a helper function.
+delegate is performed using a **delegate method**.
+
+The example that uses Helper.Delegator is as follows.  
 
 	Helper.Tooltips = new Class({
 
-		Extends: Helper.HelperObject,
-	
-		_name: 'mouseover',
+		Extends: [Helper.Delegator],
+
+		_name: 'tooltips',
 		_handler: null,
 		_observer: doc,
 	
@@ -119,28 +191,19 @@ The example that uses HelperObject is as follows.
 			ovserver.removeEvent('mouseover', this._mouseover);
 			ovserver.removeEvent('mouseout', this._mouseout);
 		}
-	
+
 	});
 
 
+### Implements
 
-### Events
+Helper.Pluggable
 
-* **onEnable** - When the helper becomes effective, it is generated. 
-* **onDisable** - When the helper becomes invalid, it is generated.
 
 ### Methods
 
-* **setName** (string) - The helper name is set.
-* **getName** - The helper name is acquired. 
-* **setTarget** (object) - The related object is specified. 
-* **getTarget** - The related object is acquired. 
 * **setObserver** (object) - The object that observes the state variation is specified. 
 * **getObserver** - The object that observes the state variation is acquired. 
-* **setEnable** (boolean) - The helper effective/is invalidated. 
-* **bind** (object) - The helper is related. 
-* **unbind** - Helper's relation is released. 
-* **isEnable** - Whether the helper is effective is confirmed. 
 * **getMethod** (string) - The executed method name is acquired. 
 * **getMethods** (string, [string]) - Two or more executed method names are acquired. 
 * **setMethods** (object) - The execution method is specified. 
@@ -191,15 +254,15 @@ Being able to notify is in the following cases.
 
 ### Extends
 
-Helper.HelperObject
+Helper.Delegator
 
 ### Events
 
-It is the same as the event of Helper.HelperObject.
+It is the same as the event of Helper.Pluggable.
 
 ### Methods
 
-It is the same as the method of Helper.HelperObject.
+It is the same as the method of Helper.Pluggable.
 
 
 
@@ -240,15 +303,15 @@ Helper's usage is as follows.
 
 ### Extends
 
-Helper.HelperObject
+Helper.Delegator
 
 ### Events
 
-It is the same as the event of Helper.HelperObject.
+It is the same as the event of Helper.Pluggable.
 
 ### Methods
 
-It is the same as the method of Helper.HelperObject.
+It is the same as the method of Helper.Pluggable.
 
 
 Helper.Orientation
@@ -288,12 +351,12 @@ Helper's usage is as follows.
 
 ### Extends
 
-Helper.HelperObject
+Helper.Delegator
 
 ### Events
 
-It is the same as the event of Helper.HelperObject.
+It is the same as the event of Helper.Pluggable.
 
 ### Methods
 
-It is the same as the method of Helper.HelperObject.
+It is the same as the method of Helper.Pluggable.
