@@ -146,7 +146,7 @@ Helper.Properties = {
                     delete options[key];
                 }
             }, this);
-            setOptions(options);
+			setOptions.call(this, options);
         };
         this.prototype.setOptions = decorator;
     }
@@ -166,10 +166,6 @@ Helper.Pluggable = new Class({
 	_target: null,
 	_enable: false,
 	_setuped: false,
-
-	initialize: function(options) {
-		this.setOptions(options);
-	},
 
 	setName: function(name){
 		if (!Type.isString(name)){
