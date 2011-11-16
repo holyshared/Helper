@@ -54,6 +54,10 @@ Helper.Keyboard = new Class({
 	disable: function() {
 		var ovserver = this._getObserver();
 		ovserver.removeEvent('keydown', this._handler);
+	},
+
+	destroy: function() {
+		delete this._handler;
 	}
 
 });

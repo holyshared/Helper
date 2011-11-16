@@ -63,6 +63,10 @@ Helper.Orientation = new Class({
 	disable: function() {
 		var ovserver = this._getObserver();
 		ovserver.removeEvent('orientationchange', this._handler);
+	},
+
+	destroy: function() {
+		delete this._handler;
 	}
 
 });

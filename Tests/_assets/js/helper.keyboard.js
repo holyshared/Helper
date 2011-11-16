@@ -22,6 +22,9 @@
 
 		controller.addHelper(helper);
 
+		var defaultStatus = controller.isEnableHelper('keyboard');
+		log ( (defaultStatus) ? 'assert ok - helper default status is enabled' : 'assert ng - helper default status is not enabled' );
+
 		var testcases = [];
 		testcases.push({
 			title: 'enable',
@@ -42,6 +45,27 @@
 				log ( (disable) ? 'assert ok - helper is disable' : 'bb' );
 			}
 		});
+
+		testcases.push({
+			title: 'destroy',
+			description : 'destroy method testcase',
+			fn: function(){
+				var check = false;
+				var helper = new Helper.Keyboard({
+					name: 'destroy'
+				});
+				var unbind = function(key){
+					check = true;
+					controller.removeEvent('unbind', unbind);
+				};
+				controller.addEvent('unbind', unbind);
+				controller.addHelper(helper);
+				controller.removeHelper(helper);
+				log ( (check) ? 'assert ok - helper is unbind' : 'assert ng - helper is not unbind' );
+
+			}
+		});
+
 
 		makeActions(testcases);
 

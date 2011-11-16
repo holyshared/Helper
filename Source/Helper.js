@@ -66,7 +66,14 @@ var Helper = this.Helper = new Class({
 	removeHelper: function(helper){
 		var unbindHelper = validateHelper(helper),
 			key = unbindHelper.getName();
+
+		unbindHelper.unbind()
+			.destroy();
+
 		delete this._helpers[key];
+
+		this.fireEvent('unbind', [key]);
+
 		return this;
 	},
 
@@ -211,12 +218,7 @@ Helper.Pluggable = new Class({
 		if (this.isSetuped() === false) {
 			this._setupHelper();
 		}
-
-		var eventType = (value) ? 'enable' : 'disable';
-		this[eventType]();
-		this.fireEvent(eventType);
-		this._enable = value;
-		return this;
+		return this._chageStatus(value);
 	},
 
 	_setupHelper: function(){
@@ -228,6 +230,14 @@ Helper.Pluggable = new Class({
 		return this._setuped;
 	},
 
+	_chageStatus: function(value){
+		var eventType = (value) ? 'enable' : 'disable';
+		this[eventType]();
+		this.fireEvent(eventType);
+		this._enable = value;
+		return this;
+	},
+
 	bind: function(control){
 		if (!Type.isObject(control)) {
 			throw new TypeError('It is an invalid object.');
@@ -236,8 +246,8 @@ Helper.Pluggable = new Class({
 		if (this.isSetuped() === false) {
 			this._setupHelper();
 		}
-		if (!this.isEnable()) {
-			this.setEnable(true);
+		if (this.isEnable()) {
+			this._chageStatus(true);
 		}
 		return this;
 	},
@@ -245,6 +255,8 @@ Helper.Pluggable = new Class({
 	unbind: function(){
 		this.setEnable(false);
 		this.setTarget(null);
+		this._setuped = false;
+		return this;
 	},
 
 	isEnable: function(){

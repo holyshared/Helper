@@ -59,6 +59,10 @@ Helper.Swipe = new Class({
 	disable: function() {
 		var ovserver = this._getObserver();
 		ovserver.removeEvent('swipe', this._handler);
+	},
+
+	destroy: function() {
+		delete this._handler;
 	}
 
 });

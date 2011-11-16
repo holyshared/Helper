@@ -19,6 +19,9 @@
 		},
 
 		disable: function(){
+		},
+
+		destroy: function(){
 		}
 
 	});
@@ -36,6 +39,9 @@
 		},
 
 		disable: function(){
+		},
+
+		destroy: function(){
 		}
 
 	});
