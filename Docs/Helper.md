@@ -38,6 +38,8 @@ When the state changes, each helper executes the method of the object object.
 
 * **onEnableHelper** (helper) - When the helper becomes effective, it is generated. 
 * **onDisableHelper** (helper) - When the helper becomes invalid, it is generated.
+* **onBindHelper** -  (helper) - It generates, when helper is assigned.
+* **onUnbindHelper** -  (helper) - It generates, when assignment of helper is canceled.
 
 ### Methods
 
@@ -63,6 +65,7 @@ The role of each method is as follows.
 * **setup** - Helper is initialized.
 * **enable** - Helper is made effective.
 * **disable** - Helper is nullified.
+* **destroy** - Helper is destroyed.
 
 The example that uses Pluggable is as follows.  
 
@@ -102,8 +105,15 @@ The example that uses Pluggable is as follows.
 		disable: function() {
 			var target = this.getTarget();
 			target.removeEvent('change', this._change);
+		},
+
+		destroy: function(){
+			delete this._container;
+			delete this._current;
+			delete this._total;
+			delete this._change;
 		}
-	
+
 	});
 
 
@@ -128,7 +138,7 @@ The example that uses Pluggable is as follows.
 * **setup** - Helper is initialized.
 * **enable** - Helper is made effective.
 * **disable** - Helper is nullified.
-
+* **destroy** - Helper is destroyed.
 
 Helper.Delegator
 -------------------------------------------------
@@ -190,6 +200,11 @@ The example that uses Helper.Delegator is as follows.
 			var ovserver = this._getObserver();
 			ovserver.removeEvent('mouseover', this._mouseover);
 			ovserver.removeEvent('mouseout', this._mouseout);
+		},
+
+		destroy: function(){
+			delete this._mouseover;
+			delete this._mouseout;
 		}
 
 	});
@@ -219,6 +234,7 @@ Helper.Pluggable
 * **setup** - Helper is initialized.
 * **enable** - Helper is made effective.
 * **disable** - Helper is nullified.
+* **destroy** - Helper is destroyed.
 
 
 Helper.Keyboard

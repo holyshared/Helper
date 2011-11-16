@@ -56,9 +56,9 @@
 				});
 				var unbind = function(helper){
 					check = true;
-					controller.removeEvent('unbind', unbind);
+					controller.removeEvent('unbindHelper', unbind);
 				};
-				controller.addEvent('unbind', unbind);
+				controller.addEvent('unbindHelper', unbind);
 				controller.addHelper(helper);
 				controller.removeHelper(helper);
 				log ( (check) ? 'assert ok - helper is unbind' : 'assert ng - helper is not unbind' );

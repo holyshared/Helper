@@ -50,7 +50,7 @@ var Helper = this.Helper = new Class({
 		})
 		.bind(this);
 
-		this.fireEvent('bind', [bindHelper]);
+		this.fireEvent('bindHelper', [bindHelper]);
 
 		key = bindHelper.getName();
 		this._helpers[key] = bindHelper;
@@ -74,7 +74,7 @@ var Helper = this.Helper = new Class({
 
 		delete this._helpers[key];
 
-		this.fireEvent('unbind', [unbindHelper]);
+		this.fireEvent('unbindHelper', [unbindHelper]);
 
 		return this;
 	},
