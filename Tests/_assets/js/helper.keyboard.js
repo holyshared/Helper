@@ -54,7 +54,7 @@
 				var helper = new Helper.Keyboard({
 					name: 'destroy'
 				});
-				var unbind = function(key){
+				var unbind = function(helper){
 					check = true;
 					controller.removeEvent('unbind', unbind);
 				};

@@ -54,7 +54,7 @@
 				var helper = new Helper.Swipe({
 					name: 'destroy'
 				});
-				var unbind = function(key){
+				var unbind = function(helper){
 					check = true;
 					controller.removeEvent('unbind', unbind);
 				};

@@ -37,7 +37,7 @@ var Helper = this.Helper = new Class({
 
 	addHelper: function(helper){
 		var key = null,
-			parent = this
+			parent = this,
 			bindHelper = validateHelper(helper);
 
 		bindHelper.addEvents({
@@ -49,6 +49,8 @@ var Helper = this.Helper = new Class({
 			}
 		})
 		.bind(this);
+
+		this.fireEvent('bind', [bindHelper]);
 
 		key = bindHelper.getName();
 		this._helpers[key] = bindHelper;
@@ -72,7 +74,7 @@ var Helper = this.Helper = new Class({
 
 		delete this._helpers[key];
 
-		this.fireEvent('unbind', [key]);
+		this.fireEvent('unbind', [unbindHelper]);
 
 		return this;
 	},
