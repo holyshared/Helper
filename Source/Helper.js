@@ -17,7 +17,7 @@ requires:
 
 provides:
   - Helper
-  - Helper.Properties
+  - Helper.Assigns
   - Helper.Pluggable
 ...
 */
@@ -36,20 +36,21 @@ var Helper = this.Helper = new Class({
 	_helpers: {},
 
 	addHelper: function(helper){
-		var that = this;
-		var bindHelper = validateHelper(helper);
+		var key = null,
+			parent = this
+			bindHelper = validateHelper(helper);
 
 		bindHelper.addEvents({
 			enable: function(){
-				that.fireEvent('enableHelper', [bindHelper]);
+				parent.fireEvent('enableHelper', [bindHelper]);
 			},
 			disable: function(){
-				that.fireEvent('disableHelper', [bindHelper]);
+				parent.fireEvent('disableHelper', [bindHelper]);
 			}
 		})
 		.bind(this);
 
-		var key = bindHelper.getName();
+		key = bindHelper.getName();
 		this._helpers[key] = bindHelper;
 		return this;
 	},
@@ -63,8 +64,8 @@ var Helper = this.Helper = new Class({
 	},
 
 	removeHelper: function(helper){
-		var unbindHelper = validateHelper(helper);
-		var key = unbindHelper.getName();
+		var unbindHelper = validateHelper(helper),
+			key = unbindHelper.getName();
 		delete this._helpers[key];
 		return this;
 	},
@@ -88,8 +89,8 @@ var Helper = this.Helper = new Class({
 	},
 
 	getHelpers: function(){
-		var helpers = [];
-		var names = Array.from(arguments);
+		var helpers = [],
+			names = Array.from(arguments);
 		if (names.length <= 0) {
 			names = Object.keys(this._helpers);
 		}
@@ -128,9 +129,9 @@ var Helper = this.Helper = new Class({
 });
 
 
-Helper.Properties = {
+Helper.Assigns = {
 
-    Properties: function(properties){
+    Assigns: function(properties){
         if (!this.prototype.setOptions) return;
         var setOptions = this.prototype.setOptions;
         var decorator = function(options){
@@ -153,14 +154,14 @@ Helper.Properties = {
 
 };
 
-Object.append(Class.Mutators, Helper.Properties);
+Object.append(Class.Mutators, Helper.Assigns);
 
 
 Helper.Pluggable = new Class({
 
 	Implements: [Options, Events],
 
-	Properties: ['name', 'target', 'enable'],
+	Assigns: ['name', 'target', 'enable'],
 
 	_name: null,
 	_target: null,

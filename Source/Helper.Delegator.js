@@ -11,7 +11,7 @@ authors:
 
 requires:
   - Helper/Helper.Pluggable
-  - Helper/Helper.Properties
+  - Helper/Helper.Assigns
 
 provides:
   - Helper.Delegator
@@ -24,7 +24,7 @@ Helper.Delegator = new Class({
 
 	Implements: [Helper.Pluggable],
 
-	Properties: ['name', 'target', 'observer', 'methods', 'enable'],
+	Assigns: ['name', 'target', 'observer', 'methods', 'enable'],
 
 	_observer: null,
 	_methods: {},
@@ -53,8 +53,8 @@ Helper.Delegator = new Class({
 	},
 
 	getMethods: function(){
-		var methods = [];
-		var names = Array.from(arguments);
+		var methods = [],
+			names = Array.from(arguments);
 		if (names.length <= 0) {
 			names = Object.keys(this._methods);
 		}
@@ -108,8 +108,8 @@ Helper.Delegator = new Class({
 	},
 
 	delegate: function(key, args){
-		var method = this.getMethod(key);
-		var target = this.getTarget();
+		var method = this.getMethod(key),
+			target = this.getTarget();
 		if (!Type.isFunction(target[method])) {
 			throw new Error('Method ' + method + ' doesn\'t exist or it is an invalid method.');
 		}

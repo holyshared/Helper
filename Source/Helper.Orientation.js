@@ -32,8 +32,8 @@ Helper.Orientation = new Class({
 	},
 
 	_onOrientationChange: function(event){
-		var type = '';
-		var orientation = win.orientation;
+		var type = '',
+			orientation = win.orientation;
 		//landscape
 		if (orientation == 90 || orientation == -90) {
 			type = 'landscape';
@@ -47,8 +47,8 @@ Helper.Orientation = new Class({
 	},
 
 	_getObserver: function(){
-		var target = this.getTarget();
-		var observer = this.getObserver();
+		var target = this.getTarget(),
+			observer = this.getObserver();
 		if (target.toElement){
 			observer = target.toElement();
 		}

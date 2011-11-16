@@ -43,8 +43,8 @@ Helper.Swipe = new Class({
 	},
 
 	_getObserver: function(){
-		var target = this.getTarget();
-		var observer = this.getObserver();
+		var target = this.getTarget(),
+			observer = this.getObserver();
 		if (target.toElement){
 			observer = target.toElement();
 		}
