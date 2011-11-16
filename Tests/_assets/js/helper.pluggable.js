@@ -106,6 +106,7 @@
 			title: 'enable',
 			description : 'enable method testcase',
 			fn: function(){
+				controller.disableHelper('controllerHelper');
 				controller.enableHelper('controllerHelper');
 				log ( (enable) ? 'assert ok - helper is enalbed' : 'aa' );
 			}
@@ -115,6 +116,7 @@
 			title: 'disable',
 			description : 'disable method testcase',
 			fn: function(){
+				controller.enableHelper('controllerHelper');
 				controller.disableHelper('controllerHelper');
 				log ( (disable) ? 'assert ok - helper is disable' : 'bb' );
 			}

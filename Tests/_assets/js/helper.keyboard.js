@@ -27,8 +27,8 @@
 			title: 'enable',
 			description : 'enable method testcase',
 			fn: function(){
+				controller.disableHelper('keyboard');
 				controller.enableHelper('keyboard');
-
 				log ( (enable) ? 'assert ok - helper is enalbed' : 'aa' );
 			}
 		});
@@ -37,8 +37,8 @@
 			title: 'disable',
 			description : 'disable method testcase',
 			fn: function(){
+				controller.enableHelper('keyboard');
 				controller.disableHelper('keyboard');
-
 				log ( (disable) ? 'assert ok - helper is disable' : 'bb' );
 			}
 		});

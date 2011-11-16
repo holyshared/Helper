@@ -27,8 +27,9 @@
 			title: 'enable',
 			description : 'enable method testcase',
 			fn: function(){
+				controller.disableHelper('swipe');
 				controller.enableHelper('swipe');
-				log ( (enable) ? 'assert ok - helper is enalbed' : 'aa' );
+				log ( (enable) ? 'assert ok - helper is enabled' : 'aa' );
 			}
 		});
 
@@ -36,6 +37,7 @@
 			title: 'disable',
 			description : 'disable method testcase',
 			fn: function(){
+				controller.enableHelper('swipe');
 				controller.disableHelper('swipe');
 				log ( (disable) ? 'assert ok - helper is disable' : 'bb' );
 			}

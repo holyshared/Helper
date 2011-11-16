@@ -165,7 +165,7 @@ Helper.Pluggable = new Class({
 
 	_name: null,
 	_target: null,
-	_enable: false,
+	_enable: true,
 	_setuped: false,
 
 	setName: function(name){
