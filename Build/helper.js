@@ -17,7 +17,7 @@ requires:
 
 provides:
   - Helper
-  - Helper.Properties
+  - Helper.Assigns
   - Helper.Pluggable
 ...
 */
@@ -36,20 +36,23 @@ var Helper = this.Helper = new Class({
 	_helpers: {},
 
 	addHelper: function(helper){
-		var that = this;
-		var bindHelper = validateHelper(helper);
+		var key = null,
+			parent = this,
+			bindHelper = validateHelper(helper);
 
 		bindHelper.addEvents({
 			enable: function(){
-				that.fireEvent('enableHelper', [bindHelper]);
+				parent.fireEvent('enableHelper', [bindHelper]);
 			},
 			disable: function(){
-				that.fireEvent('disableHelper', [bindHelper]);
+				parent.fireEvent('disableHelper', [bindHelper]);
 			}
 		})
 		.bind(this);
 
-		var key = bindHelper.getName();
+		this.fireEvent('bindHelper', [bindHelper]);
+
+		key = bindHelper.getName();
 		this._helpers[key] = bindHelper;
 		return this;
 	},
@@ -63,9 +66,16 @@ var Helper = this.Helper = new Class({
 	},
 
 	removeHelper: function(helper){
-		var unbindHelper = validateHelper(helper);
-		var key = unbindHelper.getName();
+		var unbindHelper = validateHelper(helper),
+			key = unbindHelper.getName();
+
+		unbindHelper.unbind()
+			.destroy();
+
 		delete this._helpers[key];
+
+		this.fireEvent('unbindHelper', [unbindHelper]);
+
 		return this;
 	},
 
@@ -88,8 +98,8 @@ var Helper = this.Helper = new Class({
 	},
 
 	getHelpers: function(){
-		var helpers = [];
-		var names = Array.from(arguments);
+		var helpers = [],
+			names = Array.from(arguments);
 		if (names.length <= 0) {
 			names = Object.keys(this._helpers);
 		}
@@ -128,9 +138,9 @@ var Helper = this.Helper = new Class({
 });
 
 
-Helper.Properties = {
+Helper.Assigns = {
 
-    Properties: function(properties){
+    Assigns: function(properties){
         if (!this.prototype.setOptions) return;
         var setOptions = this.prototype.setOptions;
         var decorator = function(options){
@@ -146,30 +156,26 @@ Helper.Properties = {
                     delete options[key];
                 }
             }, this);
-            setOptions(options);
+			setOptions.call(this, options);
         };
         this.prototype.setOptions = decorator;
     }
 
 };
 
-Object.append(Class.Mutators, Helper.Properties);
+Object.append(Class.Mutators, Helper.Assigns);
 
 
 Helper.Pluggable = new Class({
 
 	Implements: [Options, Events],
 
-	Properties: ['name', 'target', 'enable'],
+	Assigns: ['name', 'target', 'enable'],
 
 	_name: null,
 	_target: null,
-	_enable: false,
+	_enable: true,
 	_setuped: false,
-
-	initialize: function(options) {
-		this.setOptions(options);
-	},
 
 	setName: function(name){
 		if (!Type.isString(name)){
@@ -214,12 +220,7 @@ Helper.Pluggable = new Class({
 		if (this.isSetuped() === false) {
 			this._setupHelper();
 		}
-
-		var eventType = (value) ? 'enable' : 'disable';
-		this[eventType]();
-		this.fireEvent(eventType);
-		this._enable = value;
-		return this;
+		return this._chageStatus(value);
 	},
 
 	_setupHelper: function(){
@@ -231,6 +232,14 @@ Helper.Pluggable = new Class({
 		return this._setuped;
 	},
 
+	_chageStatus: function(value){
+		var eventType = (value) ? 'enable' : 'disable';
+		this[eventType]();
+		this.fireEvent(eventType);
+		this._enable = value;
+		return this;
+	},
+
 	bind: function(control){
 		if (!Type.isObject(control)) {
 			throw new TypeError('It is an invalid object.');
@@ -239,8 +248,8 @@ Helper.Pluggable = new Class({
 		if (this.isSetuped() === false) {
 			this._setupHelper();
 		}
-		if (!this.isEnable()) {
-			this.setEnable(true);
+		if (this.isEnable()) {
+			this._chageStatus(true);
 		}
 		return this;
 	},
@@ -248,6 +257,8 @@ Helper.Pluggable = new Class({
 	unbind: function(){
 		this.setEnable(false);
 		this.setTarget(null);
+		this._setuped = false;
+		return this;
 	},
 
 	isEnable: function(){
@@ -271,7 +282,7 @@ authors:
 
 requires:
   - Helper/Helper.Pluggable
-  - Helper/Helper.Properties
+  - Helper/Helper.Assigns
 
 provides:
   - Helper.Delegator
@@ -284,7 +295,7 @@ Helper.Delegator = new Class({
 
 	Implements: [Helper.Pluggable],
 
-	Properties: ['name', 'target', 'observer', 'methods', 'enable'],
+	Assigns: ['name', 'target', 'observer', 'methods', 'enable'],
 
 	_observer: null,
 	_methods: {},
@@ -313,8 +324,8 @@ Helper.Delegator = new Class({
 	},
 
 	getMethods: function(){
-		var methods = [];
-		var names = Array.from(arguments);
+		var methods = [],
+			names = Array.from(arguments);
 		if (names.length <= 0) {
 			names = Object.keys(this._methods);
 		}
@@ -368,8 +379,8 @@ Helper.Delegator = new Class({
 	},
 
 	delegate: function(key, args){
-		var method = this.getMethod(key);
-		var target = this.getTarget();
+		var method = this.getMethod(key),
+			target = this.getTarget();
 		if (!Type.isFunction(target[method])) {
 			throw new Error('Method ' + method + ' doesn\'t exist or it is an invalid method.');
 		}
@@ -416,8 +427,8 @@ Helper.Keyboard = new Class({
 	},
 
 	_getObserver: function(){
-		var target = this.getTarget();
-		var observer = this.getObserver();
+		var target = this.getTarget(),
+			observer = this.getObserver();
 		if (target.toElement){
 			observer = target.toElement();
 		}
@@ -436,6 +447,10 @@ Helper.Keyboard = new Class({
 	disable: function() {
 		var ovserver = this._getObserver();
 		ovserver.removeEvent('keydown', this._handler);
+	},
+
+	destroy: function() {
+		delete this._handler;
 	}
 
 });
@@ -487,8 +502,8 @@ Helper.Swipe = new Class({
 	},
 
 	_getObserver: function(){
-		var target = this.getTarget();
-		var observer = this.getObserver();
+		var target = this.getTarget(),
+			observer = this.getObserver();
 		if (target.toElement){
 			observer = target.toElement();
 		}
@@ -503,6 +518,10 @@ Helper.Swipe = new Class({
 	disable: function() {
 		var ovserver = this._getObserver();
 		ovserver.removeEvent('swipe', this._handler);
+	},
+
+	destroy: function() {
+		delete this._handler;
 	}
 
 });
@@ -544,8 +563,8 @@ Helper.Orientation = new Class({
 	},
 
 	_onOrientationChange: function(event){
-		var type = '';
-		var orientation = win.orientation;
+		var type = '',
+			orientation = win.orientation;
 		//landscape
 		if (orientation == 90 || orientation == -90) {
 			type = 'landscape';
@@ -559,8 +578,8 @@ Helper.Orientation = new Class({
 	},
 
 	_getObserver: function(){
-		var target = this.getTarget();
-		var observer = this.getObserver();
+		var target = this.getTarget(),
+			observer = this.getObserver();
 		if (target.toElement){
 			observer = target.toElement();
 		}
@@ -575,6 +594,10 @@ Helper.Orientation = new Class({
 	disable: function() {
 		var ovserver = this._getObserver();
 		ovserver.removeEvent('orientationchange', this._handler);
+	},
+
+	destroy: function() {
+		delete this._handler;
 	}
 
 });
