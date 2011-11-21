@@ -33,26 +33,17 @@ Helper.Keyboard = new Class({
 		this.delegate(event.key);
 	},
 
-	_getObserver: function(){
-		var target = this.getTarget(),
-			observer = this.getObserver();
-		if (target.toElement){
-			observer = target.toElement();
-		}
-		return observer;
-	}.protect(),
-
 	setup: function(){
 		this._handler = this._onKeydown.bind(this);
 	},
 
 	enable: function() {
-		var ovserver = this._getObserver();
+		var ovserver = this.getObserver();
 		ovserver.addEvent('keydown', this._handler);
 	},
 
 	disable: function() {
-		var ovserver = this._getObserver();
+		var ovserver = this.getObserver();
 		ovserver.removeEvent('keydown', this._handler);
 	},
 
