@@ -113,7 +113,8 @@ Helper.Delegator = new Class({
 		if (!Type.isFunction(target[method])) {
 			throw new Error('Method ' + method + ' doesn\'t exist or it is an invalid method.');
 		}
-		target[method].apply(target, args);
+		args = args || [];
+		target[method](args);
 	}
 
 });
